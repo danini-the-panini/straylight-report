@@ -34,12 +34,14 @@ Experimentation was done by rendering a variety of different scenes and measurin
 The experiment was carried out on a custom-built desktop with a 3.4GHz Core i5-3570, 8GB RAM and a 256GB Samsung 840 EVO SSD, running Ubuntu 13.10.
 
 \section{Analysis}
-The data was analysed to find out if the optimisation did actually bring about a significant increase in performance. In this case, a 10\% increase in speed (i.e. a render time taking at least 10\% less time) will be considered a significant performance improvement.
+The data was analysed to find out if the optimisation did actually bring about a significant increase in performance. In this case, a 10\% increase in speed (i.e. a render time taking at least 10\% less time) was considered a significant performance improvement.
 
-The experiment was executed seven times with ten simple scenes and thirteen complex scenes, yielding a total sample size of 161. The simple-scene sample is denoted $S$, and the complex-scene sample is denoted $C$. Each sample point contains two variables, $Y_1$ and $Y_2$, the results gathered from the unoptimised and optimised versions of the program respectively. The random variable $Y$ is defined as the percentage increase in speed from $Y_1$ to $Y_2$, and is calculated as follows:
+The experiment was executed seven times with ten simple scenes and thirteen complex scenes, yielding a total sample size of 161. The simple-scene sample is denoted $S$, and the complex-scene sample is denoted $C$. Each sample point contains two random variables, $Y_1$ and $Y_2$, denoting the results gathered from the unoptimised and optimised versions of the program respectively. The random variable $Y$ is defined as the percentage increase in speed from $Y_1$ to $Y_2$, and is calculated as
 $$
-Y = \frac{Y_1 - Y_2}{Y_1}
+Y = \frac{Y_1 - Y_2}{Y_1}.
 $$
+
+\vspace{10 mm}
 
 \begin{center}
   \begin{tikzpicture}
@@ -78,12 +80,15 @@ $$
   \end{tikzpicture}
 \end{center}
 
-The hypothesis being tested is whether or not the mean speed increase due to optimisation is in fact greater than 10\%. Thus the null and alternative hypotheses are defined as follows:
+The hypothesis being tested is whether or not the mean speed increase due to optimisation is in fact greater than 10\%. Thus the null and alternative hypotheses are defined as
 
 $$ H_0: \mu \leq 10\% $$
-$$ H_a: \mu > 10\% $$
+\begin{center}
+  and
+\end{center}
+$$ H_a: \mu > 10\%. $$
 
-A level of $\alpha = .01$ was chosen for the rejection region.
+A test level of $\alpha = .01$ was chosen for the rejection region.
 
 \section{Results}
 
