@@ -4,7 +4,8 @@
 \usepackage[utf8]{inputenc}
 \usepackage{amsmath}
 \usepackage{graphicx}
-\usepackage[colorinlistoftodos]{todonotes}
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
 
 \title{Optimising the Straylight Raytracer}
 
@@ -19,12 +20,76 @@
 The solution used in this optimisation is the utilisation of an R*-Tree. Generally R-Trees organizes the objects within a scene into a tree of axis-aligned bounding-boxes (AABB), where the children of each AABB are situated completely within the bounds of their parent's AABB, and the leaf nodes represent the bounds of each individual object in the scene. The R*-Tree, a specific type of R-Tree, tries to make these AABBs overlap each other as little as possible, thus minimising the amount of redundant intersection tests between each AABB. The aim is to reduce the number of intersection-tests done by removing all AABBs that do not intersect with each ray involved in the testing. R-Trees allow this to be done efficiently by pruning whole branches of the tree based on higher-level bounding boxes, removing many objects from the test with only a single test of their parent.
 
 \section{Experimental Setup}
-Experimentation is done by ray-tracing a wide variety of different scenes and measuring the time taken to complete the rendering of each scene. Each scene is rendered twice: once using the original, unoptimised version of the program, and again using the new, optimised version. For each render, the time elapsed is measured using the Unix ``time'' command. As an added measure, for each scene the resulting image from the optimised version is compared with the resulting image from the original so as to ensure consistency between the two versions with regard to output. The experiment is done one two different testing environments in order to obtain a wider range of results. Testing environment A is a 2009 Apple MacBook Pro with a 2GHz Core 2 Duo, 8GB RAM and a 128GB OCZ Vertex3 SSD, running OS X 10.9.2. Testing environment B is a custom-built desktop with a 3.4GHz Core i5-3570, 8GB RAM and a 256GB Samsung 840 EVO SSD, running Ubuntu 13.10.
+Experimentation was done by ray-tracing a variety of different scenes and measuring the time taken to complete the rendering of each scene. For the experiment, each scene was rendered twice: once using the original, unoptimised version of the program, and again using the new, optimised version. The time elapsed during each render was measured using the Unix ``time'' command. In order to generate a large enough sample size, the experiment was repeated several times. The scenes are divided up into ``simple'' scenes having less than five primitive objects, and ``complex'' scenes having more than five primitive objects. The experiment was carried out on a custom-built desktop with a 3.4GHz Core i5-3570, 8GB RAM and a 256GB Samsung 840 EVO SSD, running Ubuntu 13.10.
 
 \section{Analysis}
+The data is analysed to find out if the optimisation did actually bring about a significant increase in performance. In this case, a 10\% increase in speed (i.e. a render time taking at least 10\% less time) will be considered a significant performance improvement.
+
+The experiment was executed seven times with ten simple scenes and thirteen complex scenes, yielding a total sample size of 161. The simple-scene sample is denoted $S$, and the complex-scene sample is denoted $C$. Each sample point contains two variables, $Y_1$ and $Y_2$, the results gathered from the unoptimised and optimised versions of the program respectively. The random variable $Y$ is defined as the percentage increase in speed from $Y_1$ to $Y_2$, and is calculated as follows:
+$$
+Y = \frac{Y_1 - Y_2}{Y_1}
+$$
+
+\begin{center}
+  \begin{tikzpicture}
+    \begin{axis}
+      [
+        title={Sample Data},
+        xlabel={Sample Point},
+        ylabel={Y (\%)},
+        xticklabel=\ ,
+        ymin=-25, ymax=100,
+        ymajorgrids=true,
+        grid style=dashed,
+        legend style={at={(0.5,-0.25)},
+          anchor=north,legend columns=-1}
+      ]
+      \addplot [
+        only marks,
+        color=red
+      ] table [
+        x expr=\coordindex,
+        y expr=\thisrowno{0}*100
+      ] {results_simple.csv};
+      \addplot [
+        only marks,
+        color=blue
+      ] table [
+        x expr=\coordindex,
+        y expr=\thisrowno{0}*100
+      ] {results_complex.csv};
+      \addplot[red,sharp plot,update limits=false] 
+        coordinates {(-10,-0.67) (101,-0.67)};
+      \addplot[blue,sharp plot,update limits=false] 
+        coordinates {(-10,83.38) (101,83.38)};
+      \legend{$Y_S$,$Y_C$,$\bar{Y}_S$,$\bar{Y}_C$};
+    \end{axis}
+  \end{tikzpicture}
+\end{center}
+
+The hypothesis being tested is whether or not the mean speed increase due to optimisation is in fact greater than 10\%. Thus the null and alternative hypotheses are defined as follows:
+
+$$ H_0: \mu \leq 10\% $$
+$$ H_a: \mu > 10\% $$
+
+A level of $\alpha = .01$ was chosen for the rejection region.
 
 \section{Results}
 
+The results of the hypothesis testing is presented in the following table.
+
+\begin{center}
+  \begin{tabular}{ | r || c | c | c | }
+    \hline
+    Sample  & $S$           & $C$    & $S \cup C$ \\ \hline \hline
+    Z       & -11.624       & 40.960 & 10.622     \\ \hline
+    $H_0$   & Do not reject & Reject & Reject     \\
+    \hline
+  \end{tabular}
+\end{center}
+
 \section{Conclusion}
+
+The results show with almost no doubt that the optimisation resulted in a significant performance increase when rendering complex scenes, while also showing no performance increase when rendering simpler scenes. However, the test results do indicate that overall render performance was somewhat improved. Thus the conclusion is that the utilisation of an R*-Tree resulted in decidedly better performance than the original implementation.
 
 \end{document}
