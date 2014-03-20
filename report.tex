@@ -29,7 +29,9 @@ The aim in this case is to use the R-Tree to reduce the number of intersection-t
 }
 
 \section{Experimental Setup}
-Experimentation was done by ray-tracing a variety of different scenes and measuring the time taken to complete the rendering of each scene. For the experiment, each scene was rendered twice: once using the original, unoptimised version of the program, and again using the new, optimised version. The time elapsed during each render was measured using the Unix ``time'' command. In order to generate a large enough sample size, the experiment was repeated several times. The scenes are divided up into ``simple'' scenes having less than five primitive objects, and ``complex'' scenes having more than five primitive objects. The experiment was carried out on a custom-built desktop with a 3.4GHz Core i5-3570, 8GB RAM and a 256GB Samsung 840 EVO SSD, running Ubuntu 13.10.
+Experimentation was done by rendering a variety of different scenes and measuring the time taken to complete the rendering of each scene. For the experiment, each scene was rendered twice: once using the original, unoptimised version of the program, and again using the new, optimised version. The time elapsed during each render was measured using the Unix \texttt{time} command. The scenes are divided up into ``simple'' scenes having less than five primitive objects, and ``complex'' scenes having more than five primitive objects. In order to generate a large enough sample size, the experiment had to be repeated several times.
+
+The experiment was carried out on a custom-built desktop with a 3.4GHz Core i5-3570, 8GB RAM and a 256GB Samsung 840 EVO SSD, running Ubuntu 13.10.
 
 \section{Analysis}
 The data was analysed to find out if the optimisation did actually bring about a significant increase in performance. In this case, a 10\% increase in speed (i.e. a render time taking at least 10\% less time) will be considered a significant performance improvement.
